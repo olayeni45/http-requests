@@ -1,0 +1,27 @@
+REST API has multiple endpoints: GET /users, POST /products
+*JSON Data is Exchanged
+*Any server-side language, any frontend framework
+*Stateless
+
+GraphQL API has only one endpoint which can only be accessed with one endpoint
+POST /graphql 	
+*JSON Data is exchanged
+*Any server-side language, any frontend framework
+*Stateless
+
+URL-Driven vs Query Language
+REST: POST /user {name:'Max'}
+
+GraphQL: POST /graphql {query: 'query'}
+A graphql query
+{
+	query{
+		user{
+			name
+			age
+		}
+		
+	}
+}
+
+Functions are objects in JavaScript so they'll be re-created everytime once the component re-renders
