@@ -42,7 +42,7 @@ const App = () => {
     setIsLoading(false);
   }, []);
 
-  const addMovieHandler = useCallback(async (movie) => {
+  const addMovieHandler = async (movie) => {
     await fetch(`${FIREBASE_URL}/movies.json`, {
       method: "POST",
       body: JSON.stringify(movie),
@@ -50,7 +50,7 @@ const App = () => {
         "Content-Type": "application/json",
       },
     });
-  }, []);
+  };
 
   useEffect(() => {
     fetchMoviesHandler();
