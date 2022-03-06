@@ -2,10 +2,7 @@ import React, { Fragment, useState, useEffect, useCallback } from "react";
 import "./App.css";
 import MovieList from "./components/MoviesList";
 import AddMovie from "./components/AddMovie";
-import { fetchMovies } from "./axios/axios";
-
-//const BASE_URL = "https://swapi.dev/api";
-const FIREBASE_URL = "https://react-http-8b31f-default-rtdb.firebaseio.com";
+import { fetchMovies, createMovie } from "./axios/axios";
 
 const App = () => {
   const [movies, setMovies] = useState([]);
@@ -23,31 +20,34 @@ const App = () => {
         throw new Error("Something went wrong");
       }
 
-      const loadedMovies = result.data.map((movie) => {
-        return {
-          id: movie["episode_id"],
-          title: movie.title,
-          openingText: movie["opening_crawl"],
-          releaseDate: movie["release_date"],
-        };
-      });
+      const loadedMovies = [];
+
+      for (const key in result.data) {
+        loadedMovies.push({
+          id: key,
+          title: result.data[key].title,
+          openingText: result.data[key]["openingText"],
+          releaseDate: result.data[key]["releaseDate"],
+        });
+      }
 
       setMovies(loadedMovies);
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     }
 
     setIsLoading(false);
   }, []);
 
   const addMovieHandler = async (movie) => {
-    await fetch(`${FIREBASE_URL}/movies.json`, {
-      method: "POST",
-      body: JSON.stringify(movie),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const response = await createMovie(movie);
+      if (response.status !== 200) {
+        throw new Error("Something went wrong.");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   useEffect(() => {
