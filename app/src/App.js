@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect, useCallback } from "react";
 import "./App.css";
 import MovieList from "./components/MoviesList";
 import AddMovie from "./components/AddMovie";
+import { fetchMovies } from "./axios/axios";
 
 //const BASE_URL = "https://swapi.dev/api";
 const FIREBASE_URL = "https://react-http-8b31f-default-rtdb.firebaseio.com";
@@ -16,27 +17,24 @@ const App = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${FIREBASE_URL}/movies.json`);
+      const result = await fetchMovies();
 
-      if (response.status !== 200) {
-        throw new Error("Something went wrong.");
+      if (result.status !== 200) {
+        throw new Error("Something went wrong");
       }
 
-      const data = await response.json();
-      const loadedMovies = [];
-
-      for (const key in data) {
-        loadedMovies.push({
-          id: key,
-          title: data[key].title,
-          openingText: data[key].openingText,
-          releaseDate: data[key].releaseDate,
-        });
-      }
+      const loadedMovies = result.data.map((movie) => {
+        return {
+          id: movie["episode_id"],
+          title: movie.title,
+          openingText: movie["opening_crawl"],
+          releaseDate: movie["release_date"],
+        };
+      });
 
       setMovies(loadedMovies);
     } catch (error) {
-      setError(error.message);
+      setError(error.message)
     }
 
     setIsLoading(false);
