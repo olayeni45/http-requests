@@ -1,7 +1,5 @@
 import axios from "axios";
-
-//const BASE_URL = "https://swapi.dev/api";
-const FIREBASE_URL = "https://react-http-8b31f-default-rtdb.firebaseio.com";
+const FIREBASE_URL = process.env.REACT_APP_FIREBASE_URL;
 
 export const fetchMovies = async () => {
   try {
